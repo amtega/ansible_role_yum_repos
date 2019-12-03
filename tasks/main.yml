@@ -1,0 +1,71 @@
+---
+# Role tasks
+
+- include_role:
+    name: amtega.check_platform
+  vars:
+    check_platform_distributions:
+      centos: 6
+      fedora: 29
+      rhel: 6
+
+- include_role:
+    name: amtega.packages
+  vars:
+    packages_os:
+      all:
+        all:
+          yum-plugin-priorities: present
+
+- include_role:
+    name: amtega.select_hostvars
+  vars:
+    select_hostvars_query:
+      pattern: "^yum_repos_repofile_.*"
+      fact_name: yum_repos_hostvars_repositories
+      output_type: list
+  when: yum_repos_repofiles_load_from_hostvars | bool
+
+- block:
+    - name: Configure yum priorities plugin
+      template:
+        src: priorities.conf.j2
+        dest: "{{ yum_repos_priorities_file }}"
+
+    - block:
+        - name: Remove yum repository files
+          file:
+            path: "{{ yum_repos_item_path }}"
+            state: absent
+          loop: >-
+            {{ yum_repos_repofiles_to_manage
+               | selectattr("state", "equalto", "absent")
+               | list }}
+          loop_control:
+            loop_var: yum_repos_item
+            label: "{{ yum_repos_item_path }}"
+
+        - name: Create yum repository files
+          template:
+            src: repo.j2
+            dest: "{{ yum_repos_item_path }}"
+          loop: >-
+            {{ yum_repos_repofiles_to_manage
+               | selectattr("state", "equalto", "present")
+               | list }}
+          loop_control:
+            loop_var: yum_repos_item
+            label: "{{ yum_repos_item_path }}"
+      vars:
+        yum_repos_repofiles_to_manage: >-
+          {{ yum_repos_repofiles
+             + ((yum_repos_repofiles_load_from_hostvars)
+                | ternary(yum_repos_hostvars_repositories
+                          | default([])
+                          | flatten,
+                          [])) }}
+        yum_repos_item_path: >-
+          {{ yum_repos_repofile_path }}/{{ yum_repos_item.filename }}
+
+  tags:
+    - role::yum_repos

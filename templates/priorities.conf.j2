@@ -1,0 +1,8 @@
+{{ ansible_managed | comment }}
+
+[main]
+{% if  yum_repos_priorities_state == "enabled" %}
+enabled = 1
+{% else %}
+enabled = 0
+{% endif %}

@@ -1,0 +1,24 @@
+{{ ansible_managed | comment }}
+
+{% for repo in yum_repos_item.repos %}
+[{{repo.name}}]
+name={{ repo.description }}
+{% if repo.mirrorlist is defined %}
+mirrorlist={{ repo.mirrorlist }}
+{% else %}
+baseurl={{ repo.base_url }}
+{% endif %}
+enabled={{ (repo.enabled) | ternary(1, 0) }}
+{% if repo.gpgcheck %}
+gpgcheck={{ (repo.gpgcheck) | ternary(1, 0) }}
+gpgkey={{ repo.gpgkey }}
+{% else %}
+gpgcheck=0
+{% endif %}
+{% if repo.priority is defined %}
+priority={{ repo.priority }}
+{% endif %}
+{% if repo.proxy is defined %}
+proxy={{ repo.proxy }}
+{% endif %}
+{% endfor %}

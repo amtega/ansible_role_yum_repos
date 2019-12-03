@@ -1,0 +1,37 @@
+---
+# Role default lower priority variables
+
+# Enable yum priorities plugin
+
+yum_repos_priorities_state: enabled
+yum_repos_priorities_file: /etc/yum/pluginconf.d/priorities.conf
+
+#  Yum repofiles directory
+
+yum_repos_repofile_path: /etc/yum.repos.d
+
+# List of dicts with the yum repo files to deploy. The format of the dicts is:
+#
+# {
+#   filename: <string>      # Filename for the repo file
+#   state: <present_absent> # State of the repo file
+#   repos:                  # List of dicts with repositories managed in a file
+#     - name: <string>        # Name of the repo
+#       description: <string> # Description
+#       base_url: <url]>      # URL
+#       mirrorlist: <url>     # Mirror list url
+#       enabled: <yes_no>     # Enable or disable repo
+#       gpgcheck: <yes_no>    # Enable or disable GPP check (default is no)
+#       gpgkey:               # GPG key  (optional)
+#       priority: <number-    # Priority (1-99) (optional)
+#       proxy: <url>          # Proxy to use (optional)
+# }
+
+yum_repos_repofiles: []
+
+# Indicate `yum_repos_repofiles` must be loaded also from host variables. Any
+# host variable that begins with "yum_repos_repofile_*" and contains the
+# necessary attributes will be loaded as an item to manage by the role. The
+# variables must follow the structure detailed before for `yum_repos_repofiles`
+
+yum_repos_repofiles_load_from_hostvars: true
