@@ -1,31 +1,6 @@
 ---
 # Role tasks
 
-- include_role:
-    name: amtega.check_platform
-  vars:
-    check_platform_distributions:
-      centos: 6
-      fedora: 29
-      rhel: 6
-
-- include_role:
-    name: amtega.packages
-  vars:
-    packages_os:
-      all:
-        all:
-          yum-plugin-priorities: present
-
-- include_role:
-    name: amtega.select_hostvars
-  vars:
-    select_hostvars_query:
-      pattern: "^yum_repos_repofile_.*"
-      fact_name: yum_repos_hostvars_repositories
-      output_type: list
-  when: yum_repos_repofiles_load_from_hostvars | bool
-
 - block:
     - name: Configure yum priorities plugin
       template:
