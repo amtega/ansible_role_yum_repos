@@ -30,6 +30,7 @@ dependencies:
         redhat: 6
 
   - role: amtega.packages
+    when: yum_repos_priorities_state == "enabled"
     vars:
       packages_os:
         all:
