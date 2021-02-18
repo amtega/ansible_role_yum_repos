@@ -6,14 +6,15 @@
   tasks:
     - name: Gather priorities and repos
       shell: >-
+        set -o pipefail ;
         sed -n -e \
         "/^\[/h; /priority *=/{ G; s/\n/ /; s/ity=/ity = /; p }" \
         /etc/yum.repos.d/*.repo \
         | sort -k3n
-      changed_when: false
-      register: read_yum_repos_result
       args:
         warn: no
+      changed_when: false
+      register: read_yum_repos_result
 
     - name: Assert priorities ar ok
       assert:
