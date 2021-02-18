@@ -30,7 +30,9 @@ dependencies:
         redhat: 7
 
   - role: amtega.packages
-    when: yum_repos_priorities | bool
+    when:
+      - yum_repos_priorities | bool
+      - ansible_facts.distribution_major_version is version("7", "<=")
     vars:
       packages_os:
         all:
