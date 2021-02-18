@@ -1,7 +1,7 @@
 {{ ansible_managed | comment }}
 
 [main]
-{% if  yum_repos_priorities_state == "enabled" %}
+{% if  yum_repos_priorities | bool %}
 enabled = 1
 {% else %}
 enabled = 0

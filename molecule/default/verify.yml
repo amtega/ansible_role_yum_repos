@@ -1,0 +1,25 @@
+---
+
+- name: Verify
+  hosts: molecule_hosts
+  gather_facts: no
+  tasks:
+    - name: Gather priorities and repos
+      shell: >-
+        set -o pipefail ;
+        sed -n -e \
+        "/^\[/h; /priority *=/{ G; s/\n/ /; s/ity=/ity = /; p }" \
+        /etc/yum.repos.d/*.repo \
+        | sort -k3n
+      args:
+        warn: no
+      changed_when: false
+      register: read_yum_repos_result
+
+    - name: Assert priorities ar ok
+      assert:
+        that:
+          - stdout is search("priority = 10 \[server-rpms\]")
+          - stdout is search("priority = 10 \[server-optional-rpms\]")
+      vars:
+        stdout: "{{ read_yum_repos_result.stdout }}"

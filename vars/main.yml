@@ -1,0 +1,4 @@
+---
+# Role variables
+
+yum_repos_priorities_conf_path: /etc/yum/pluginconf.d/priorities.conf
