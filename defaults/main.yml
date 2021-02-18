@@ -3,8 +3,7 @@
 
 # Enable yum priorities plugin
 
-yum_repos_priorities_state: enabled
-yum_repos_priorities_file: /etc/yum/pluginconf.d/priorities.conf
+yum_repos_priorities: yes
 
 #  Yum repofiles directory
 

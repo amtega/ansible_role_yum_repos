@@ -5,7 +5,7 @@
     - name: Configure yum priorities plugin
       template:
         src: priorities.conf.j2
-        dest: "{{ yum_repos_priorities_file }}"
+        dest: "{{ yum_repos_priorities_conf_path }}"
 
     - block:
         - name: Remove yum repository files
