@@ -2,6 +2,12 @@
 
 dependency:
   name: galaxy
+  enabled: yes
+  options:
+    ignore-certs: yes
+    ignore-errors: yes
+    role-file: "${MOLECULE_SCENARIO_DIRECTORY}/requirements.yml"
+    requirements-file: "${MOLECULE_SCENARIO_DIRECTORY}/requirements.yml"
 driver:
   name: docker
 lint: "${MOLECULE_SCENARIO_DIRECTORY}/linters.sh"
@@ -47,13 +53,13 @@ provisioner:
                 - name: server-rpms
                   description: Local mirror server rpms
                   base_url: http://acme.com/server-rpms
-                  enabled: yes
+                  enabled: no
                   gpgcheck: no
                   priority: 10
                 - name: server-optional-rpms
                   description: Local mirror server optional rpms
                   base_url: http://acme.com/server-rpms-optional
-                  enabled: yes
+                  enabled: no
                   gpgcheck: no
                   priority: 10
 
