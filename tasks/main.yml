@@ -2,13 +2,6 @@
 # Role tasks
 
 - block:
-    - name: Configure yum priorities plugin
-      template:
-        src: priorities.conf.j2
-        dest: "{{ yum_repos_priorities_conf_path }}"
-        mode: 0755
-      when: ansible_facts.distribution_major_version is version("7", "<=")
-
     - block:
         - name: Remove yum repository files
           file:
@@ -43,6 +36,24 @@
                           [])) }}
         yum_repos_item_path: >-
           {{ yum_repos_repofile_path }}/{{ yum_repos_item.filename }}
+
+    - block:
+        - name: Configure yum priorities plugin
+          template:
+            src: priorities.conf.j2
+            dest: "{{ yum_repos_priorities_conf_path }}"
+            mode: 0755
+
+        - include_role:
+            name: amtega.packages
+          vars:
+            packages_os:
+              all:
+                all:
+                  yum-plugin-priorities: present
+      when:
+        - yum_repos_priorities | bool
+        - ansible_facts.distribution_major_version is version("7", "<=")
 
   tags:
     - role::yum_repos
