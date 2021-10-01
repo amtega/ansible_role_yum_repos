@@ -33,4 +33,4 @@ yum_repos_repofiles: []
 # necessary attributes will be loaded as an item to manage by the role. The
 # variables must follow the structure detailed before for `yum_repos_repofiles`
 
-yum_repos_repofiles_load_from_hostvars: true
+yum_repos_repofiles_load_from_hostvars: yes
