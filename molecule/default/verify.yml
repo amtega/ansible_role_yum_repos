@@ -13,7 +13,7 @@
         | sort -k3n
       args:
         warn: no
-      changed_when: false
+      changed_when: no
       register: read_yum_repos_result
 
     - name: Assert priorities ar ok

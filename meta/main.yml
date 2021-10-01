@@ -3,6 +3,7 @@
 
 galaxy_info:
   role_name: yum_repos
+  namespace: amtega
   author: José Enrique Mourón Regueira / Juan Antonio Valiño García
   description: Configure yum repo files
   company: AMTEGA - Xunta de Galicia
@@ -15,8 +16,8 @@ galaxy_info:
         - 8
     - name: Fedora
       versions:
-        - 32
         - 33
+        - 34
   galaxy_tags:
     - yum
     - repositories
@@ -26,18 +27,8 @@ dependencies:
     vars:
       check_platform_distributions:
         centos: 7
-        fedora: 32
+        fedora: 33
         redhat: 7
-
-  - role: amtega.packages
-    when:
-      - yum_repos_priorities | bool
-      - ansible_facts.distribution_major_version is version("7", "<=")
-    vars:
-      packages_os:
-        all:
-          all:
-            yum-plugin-priorities: present
 
   - role: amtega.select_hostvars
     vars:
@@ -46,3 +37,7 @@ dependencies:
         fact_name: yum_repos_hostvars_repositories
         output_type: list
     when: yum_repos_repofiles_load_from_hostvars | bool
+
+  - role: amtega.packages
+    tags:
+      - never
